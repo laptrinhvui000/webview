@@ -106,6 +106,10 @@ type WebView interface {
 	// Navigate navigates webview to the given URL. URL may be a data URI, i.e.
 	// "data:text/html,<html>...</html>". It is often ok not to url-encode it
 	// properly, webview will re-encode it for you.
+
+	// Set HTML dirrectly .
+	SetHtml(html string)
+
 	Navigate(url string)
 
 	// Init injects JavaScript code at the initialization of the new page. Every
@@ -183,6 +187,12 @@ func (w *webview) Navigate(url string) {
 	s := C.CString(url)
 	defer C.free(unsafe.Pointer(s))
 	C.webview_navigate(w.w, s)
+}
+
+func (w *webview) SetHtml(html string) {
+	s := C.CString(html)
+	defer C.free(unsafe.Pointer(s))
+	C.webview_set_html(w.w, s)
 }
 
 func (w *webview) SetTitle(title string) {
